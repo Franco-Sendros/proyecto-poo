@@ -6,30 +6,31 @@ import java.util.Set;
 
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
+import jakarta.persistence.*;
+import java.util.Set;
+
 @Entity
+@Getter @Setter @ToString
 @Table(name = "usuarios")
-public class Usuario implements Serializable {
+public class Usuario {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="usuario_sequence")
-    @SequenceGenerator(name="usuario_sequence", sequenceName="usuario_sequence", allocationSize=100)
-    @Column(name = "idusuarios")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Column(name = "nombre_usuario", length = 255, nullable = false)
+    @Column(name = "nombre_usuario", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "contrasenia", length = 255, nullable = false)
+    @Column(name = "contrasenia", nullable = false)
     private String password;
 
-    @Column(name = "rol", length = 255, nullable = false)
-    private String userType;
+    @Column(name = "rol", nullable = false)
+    private String rol;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Permiso> permisos;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Token> sesiones;
+
 }

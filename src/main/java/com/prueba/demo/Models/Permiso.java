@@ -4,27 +4,24 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.io.Serializable;
 
-@Getter
-@Setter
-@ToString
-@Entity
-@Table(name = "permisos")
-public class Permiso implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="permiso_sequence")
-    @SequenceGenerator(name="permiso_sequence", sequenceName="permiso_sequence", allocationSize=100)
-    @Column(name = "idpermisos")
-    private Long id;
 
-    @ManyToOne
+@Entity
+@Getter @Setter @ToString
+@Table(name = "permisos")
+public class Permiso {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sistema", nullable = false)
     private Sistema sistema;
-    
+
 }

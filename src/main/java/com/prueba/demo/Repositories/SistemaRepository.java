@@ -9,5 +9,5 @@ import com.prueba.demo.Models.Sistema;
 
 @Repository
 public interface SistemaRepository extends JpaRepository<Sistema, Long> {
-    Sistema findByNameSystem(String name);
+    Sistema findBySystemName(String systemName);
 }

@@ -10,7 +10,5 @@ import com.prueba.demo.Models.Usuario;
 
 @Repository
 public interface PermisosRepository extends JpaRepository<Permiso, Long> {
-
     Set<Permiso> findByUsuario(Usuario usuario);
-
 }

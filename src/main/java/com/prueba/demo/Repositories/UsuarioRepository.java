@@ -8,7 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
     Usuario findByName(String name); // Método para encontrar un usuario por nombre de usuario
-
 }

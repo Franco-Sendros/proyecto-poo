@@ -7,24 +7,20 @@ import lombok.ToString;
 
 import java.util.Date;
 
-@Getter
-@Setter
-@ToString
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
+@Getter @Setter @ToString
 @Table(name = "sesiones")
 public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idsesiones")
-    private Long id;
+    private long idsesiones;
 
-    @Column(name = "token", nullable = false, length = 255)
+    @Column(name = "token", nullable = false, unique = true)
     private String token;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario", nullable = false)
-    private Usuario usuario;
 
     @Column(name = "inicio", nullable = false)
     private Date createdAt;
@@ -32,5 +28,8 @@ public class Token {
     @Column(name = "expira", nullable = false)
     private Date expiresAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario", nullable = false)
+    private Usuario usuario;
 
 }

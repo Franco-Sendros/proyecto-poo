@@ -99,7 +99,7 @@ public class ServiceApiLogin {
         }
 
         // Verificar si el sistema asociado al token no es válido
-        if (sistemaRepository.findByNameSystem(request.systemId) == null) {
+        if (sistemaRepository.findBySystemName(request.systemId) == null) {
             // El usuario no existe, no autorizado
             response.authorized = false;
             System.out.println("-----------> 2");
@@ -110,11 +110,11 @@ public class ServiceApiLogin {
         // Verificar si el token está asociado al sistema
         Usuario usuarioDeToken = token.getUsuario();
         
-        sistemaRepository.findByNameSystem(request.systemId);//obtuve el sistema que si exite
+        sistemaRepository.findBySystemName(request.systemId);//obtuve el sistema que si exite
         Set<Permiso> permisosArray = permisosRepository.findByUsuario(usuarioDeToken);
         for (Permiso p : permisosArray) {
             // Si pasó todas las verificaciones, autorizado
-            if (p.getSistema().getNameSystem().equals(request.systemId)) {
+            if (p.getSistema().getSystemName().equals(request.systemId)) {
                 response.authorized = true;
                 System.out.println("-----------> 3");
                 return ResponseEntity.ok(response);
