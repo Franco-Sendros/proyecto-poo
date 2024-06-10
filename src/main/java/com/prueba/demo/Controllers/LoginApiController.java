@@ -1,12 +1,23 @@
 package com.prueba.demo.Controllers;
 
 
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.prueba.demo.Services.ServiceApiLogin;
+
+
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-
+@Getter
+@Setter
 @RestController
 @RequestMapping("/sistema_login")
 public class LoginApiController {
@@ -41,13 +52,15 @@ public class LoginApiController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody RequestLogin request) {
-        return serviceApiLogin.login(request);
+    public ResponseEntity<?> login(@RequestBody RequestLogin request,HttpServletResponse responseCokies) {
+        ResponseEntity<?> respuesta = serviceApiLogin.login(request, responseCokies);
+        return respuesta;
     }
 
     @PostMapping("/authorize")
     public ResponseEntity<?> authorize(@RequestBody RequestAuthorize request) {
         return serviceApiLogin.authorize(request);
     }
+
     
 }

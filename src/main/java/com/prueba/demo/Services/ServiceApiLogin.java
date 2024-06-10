@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
 import com.prueba.demo.Controllers.LoginApiController;
 import com.prueba.demo.Controllers.LoginApiController.RequestAuthorize;
 import com.prueba.demo.Controllers.LoginApiController.RequestLogin;
@@ -19,6 +20,8 @@ import com.prueba.demo.Repositories.PermisosRepository;
 import com.prueba.demo.Repositories.SistemaRepository;
 import com.prueba.demo.Repositories.TokenRepository;
 import com.prueba.demo.Repositories.UsuarioRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -47,7 +50,7 @@ public class ServiceApiLogin {
 
 
     
-    public ResponseEntity<?> login(RequestLogin request){
+    public ResponseEntity<?> login(RequestLogin request, HttpServletResponse responseCokies){
         Usuario usuario = usuarioRepository.findByName(request.username);
         if (usuario != null && usuario.getPassword().equals(request.password)) {
             Long userId = usuario.getId();
@@ -69,14 +72,21 @@ public class ServiceApiLogin {
             tokenEntity.setCreatedAt(new Date());
             tokenEntity.setExpiresAt(new Date(System.currentTimeMillis() + expiresIn * 1000));
             tokenRepository.save(tokenEntity);
+
+            // Crear la cookie con el token
+            Cookie cookie = new Cookie("token", token);
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(3600); // 1 hora
+            cookie.setPath("/"); // Hacer que la cookie esté disponible en toda la aplicación
+            responseCokies.addCookie(cookie); 
             
             // Crear la respuesta
             LoginApiController.ResponseLogin response = new LoginApiController.ResponseLogin();
             response.token = token;
             response.userId = userId;
             response.expiresIn = expiresIn;
-
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
         } else {
             // Credenciales incorrectas
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
@@ -93,8 +103,7 @@ public class ServiceApiLogin {
         if (token == null || token.getExpiresAt().before(new Date())) {
             // El token no existe, no autorizado
             response.authorized = false;
-            System.out.println("-----------> 1");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
 
         }
 
@@ -102,8 +111,7 @@ public class ServiceApiLogin {
         if (sistemaRepository.findByNameSystem(request.systemId) == null) {
             // El usuario no existe, no autorizado
             response.authorized = false;
-            System.out.println("-----------> 2");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
         
         
@@ -116,14 +124,34 @@ public class ServiceApiLogin {
             // Si pasó todas las verificaciones, autorizado
             if (p.getSistema().getNameSystem().equals(request.systemId)) {
                 response.authorized = true;
-                System.out.println("-----------> 3");
-                return ResponseEntity.ok(response);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }
         }
 
         // Si el usuario no tiene permiso a ese sistema pues no tiene jaja 
         response.authorized = false;
-        System.out.println("-----------> 4");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    public boolean internalAuthorize(String tokenValue, String systemId) {
+        // Crear una instancia de RequestAuthorize y asignar los valores de token y systemId
+        RequestAuthorize request = new RequestAuthorize();
+        request.token = tokenValue;
+        request.systemId = systemId;
+    
+        // Llamar al método authorize con la solicitud creada y obtiene la respuesta
+        ResponseEntity<?> response = authorize(request);
+    
+        // Verificar si el estado de la respuesta es HttpStatus.OK (200 OK)
+        if (response.getStatusCode() == HttpStatus.OK) {
+            // Obtener el cuerpo de la respuesta y convertirlo a un objeto ResponseAuthorize
+            ResponseAuthorize responseAuthorize = (ResponseAuthorize) response.getBody();
+    
+            // Verificar si responseAuthorize no es nulo y si está autorizado
+            return responseAuthorize != null && responseAuthorize.authorized;
+        }
+    
+        // Si el estado de la respuesta no es HttpStatus.OK, devolver false
+        return false;
     }
 }
