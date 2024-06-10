@@ -1,6 +1,10 @@
 package com.prueba.demo.Services;
 
+import com.prueba.demo.Models.Permiso;
+import com.prueba.demo.Models.Token;
 import com.prueba.demo.Models.Usuario;
+import com.prueba.demo.Repositories.PermisosRepository;
+import com.prueba.demo.Repositories.TokenRepository;
 import com.prueba.demo.Repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.Response;
@@ -19,6 +23,12 @@ public class CRUDUserService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PermisosRepository permisosRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
     public ResponseEntity<?> getAllUsers(){
         List<Usuario> usuarios = usuarioRepository.findAll();
         return ResponseEntity.ok(usuarios);
@@ -33,27 +43,36 @@ public class CRUDUserService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> read(Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return ResponseEntity.ok().body(usuario.get());
-    }
+    public ResponseEntity<?> update(long id, Usuario updatedUser) {
+        Optional<Usuario> existingUserOpt = usuarioRepository.findById(id);
+        if (existingUserOpt.isPresent()) {
+            Usuario existingUser = existingUserOpt.get();
 
-    public ResponseEntity<?> update(long id, Usuario updatedUsuario) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            existingUser.setName(updatedUser.getName());
+            existingUser.setRol(updatedUser.getRol());
 
-        if (optionalUsuario.isPresent()) {
-            Usuario existingUsuario = optionalUsuario.get();
-            existingUsuario.setName(updatedUsuario.getName());
-            existingUsuario.setPassword(updatedUsuario.getPassword());
-            existingUsuario.setRol(updatedUsuario.getRol());
-            existingUsuario.setPermisos(updatedUsuario.getPermisos());
-            existingUsuario.setSesiones(updatedUsuario.getSesiones());
+            existingUser.getPermisos().clear();
+            for (Permiso permiso : updatedUser.getPermisos()) {
+                permiso.setUsuario(existingUser);
+                existingUser.getPermisos().add(permiso);
+            }
 
-            usuarioRepository.save(existingUsuario);
-            return ResponseEntity.ok(existingUsuario);
+            existingUser.getSesiones().clear();
+            for (Token sesion : updatedUser.getSesiones()) {
+                sesion.setUsuario(existingUser);
+                existingUser.getSesiones().add(sesion);
+            }
+
+            if (updatedUser.getPassword() != null) {
+                existingUser.setPassword(updatedUser.getPassword());
+            }
+
+            usuarioRepository.save(existingUser);
+            return ResponseEntity.ok(existingUser);
         } else {
-            return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Usuario no encontrado");
+            return ResponseEntity.notFound().build();
         }
+
     }
 
     public ResponseEntity<?> delete(Long id) {

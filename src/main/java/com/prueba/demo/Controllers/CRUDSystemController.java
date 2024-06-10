@@ -24,12 +24,12 @@ public class CRUDSystemController {
         return crudUserService.create(new Usuario(user.username, user.password, user.role));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @RequestBody Usuario user) {
         return crudUserService.update(id, user);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> delete(@PathVariable long id) {
         return crudUserService.delete(id);
     }
