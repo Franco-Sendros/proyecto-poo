@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+    <div class="login">
+        <h1>Inicio de Sesión</h1>
+        <form id="login" th:action="@{/sistema_login/login}" method="post">
+            <div class="username">
+                <input type="text" id="username" name="username" placeholder="Usuario">
+            </div>
+            <div class="password">
+                <input type="password" id="password" name="password" placeholder="Contraseña">
+            </div>
+            <div class="submit">
+                <input type="submit" value="Iniciar Sesión">
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('login').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+        var formData = new FormData(this); // Obtiene los datos del formulario
+        var objectToSend = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
+
+        fetch('/sistema_login/login', { // Cambia '/sistema_login/login' si es necesario
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(objectToSend)
+        })
+       .then(response => {
+            // Comprueba el código de estado de la respuesta
+            if (response.status === 201) {
+                // Redirige al usuario a otra página si el inicio de sesión fue exitoso
+                window.location.href = "/sistema_login/panelcontroller/redirection"; // URL a la que deseas redirigir
+            } else {
+                // Maneja otros códigos de estado según sea necesario
+                console.error('Error de inicio de sesión');
+            }
+        })
+       .catch(error => console.error('Error:', error)); // Maneja cualquier error que pueda ocurrir
+    });
+});
+    </script>
+
+</body>
+</html>
