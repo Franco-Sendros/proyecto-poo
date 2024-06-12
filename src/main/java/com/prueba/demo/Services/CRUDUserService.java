@@ -3,11 +3,10 @@ package com.prueba.demo.Services;
 import com.prueba.demo.Models.Permiso;
 import com.prueba.demo.Models.Token;
 import com.prueba.demo.Models.Usuario;
-import com.prueba.demo.Repositories.PermisosRepository;
-import com.prueba.demo.Repositories.TokenRepository;
+//import com.prueba.demo.Repositories.PermisosRepository;
+//import com.prueba.demo.Repositories.TokenRepository;
 import com.prueba.demo.Repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +21,13 @@ public class CRUDUserService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
+    /* 
     @Autowired
     private PermisosRepository permisosRepository;
 
     @Autowired
     private TokenRepository tokenRepository;
-
+    */
     public ResponseEntity<?> getAllUsers(){
         List<Usuario> usuarios = usuarioRepository.findAll();
         return ResponseEntity.ok(usuarios);

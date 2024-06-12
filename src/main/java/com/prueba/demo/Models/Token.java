@@ -7,8 +7,6 @@ import lombok.ToString;
 
 import java.util.Date;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter @ToString
