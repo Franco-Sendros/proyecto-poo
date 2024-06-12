@@ -14,6 +14,7 @@ public class Sistema {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idsistemas")
     private long systemId;
 
     @Column(name = "nombre_sistema", nullable = false)

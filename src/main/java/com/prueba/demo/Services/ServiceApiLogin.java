@@ -52,6 +52,9 @@ public class ServiceApiLogin {
     
     public ResponseEntity<?> login(RequestLogin request, HttpServletResponse responseCokies){
         Usuario usuario = usuarioRepository.findByName(request.username);
+        if (!usuario.getName().equals(request.username)) {
+            usuario = null;
+        }
         if (usuario != null && usuario.getPassword().equals(request.password)) {
             Long userId = usuario.getId();
 
