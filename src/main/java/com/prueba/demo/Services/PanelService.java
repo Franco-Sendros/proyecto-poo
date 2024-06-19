@@ -19,16 +19,20 @@ public class PanelService {
     public boolean checkSession(HttpServletRequest requestCookies) {
     Cookie[] cookies = requestCookies.getCookies();
     String tokenValue = null;
-
+        System.out.println("Buscando cookies");
     if (cookies!= null) {
+        System.out.println("Hay Cookies");
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {
+                System.out.println("Se encontro la cookie");
                 tokenValue = cookie.getValue();
                 break;
             }
         }
-        }
+    }
+    System.out.println("Comprobando si funciona");
         if (tokenValue!= null) {
+            System.out.println(serviceApiLogin.internalAuthorize(tokenValue, "PANEL_USUARIOS"));
             return serviceApiLogin.internalAuthorize(tokenValue, "PANEL_USUARIOS");
         } else {
         

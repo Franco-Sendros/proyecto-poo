@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.prueba.demo.Services.PanelService;
@@ -14,30 +15,35 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
-@RequestMapping("/sistema_login/panelcontroller")
+@RequestMapping("/sistema_login")
 public class PanelController {
 
     @Autowired
     private PanelService panelService;
 
-    @GetMapping("")
+    @GetMapping("/gestion")
     public String getPaginaPrincipal(HttpServletRequest requestCookies, Model model,HttpServletResponse responseCookies) {
         boolean sessionOK = panelService.checkSession(requestCookies);
-        if (!sessionOK) { 
+        System.out.println(sessionOK);
+        if (!sessionOK) {
             //guarda la ultima sesion
             Cookie galleta = new Cookie("ultimaPagina", requestCookies.getRequestURL().toString());
             responseCookies.addCookie(galleta);
             // Redirige al usuario a la página de login si la sesión no es válida
-            return "redirect:/sistema_login/panelcontroller/login";
+            return "redirect:/sistema_login/";
         }
         // Si la sesión es válida, simplemente muestra la página principal
         return "interfaz";
     }
 
+    @GetMapping("/gestion/{id}")
+    public String getPaginaUsuario(HttpServletRequest requestCookies, Model model,@PathVariable long id) {
+        return "users";
+    }
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public String showLoginPage() {
-        return "login";
+        return "index";
     }
 
     @GetMapping("/redirection")
@@ -63,7 +69,6 @@ public class PanelController {
         // Si no se encuentra la cookie, puedes decidir qué hacer, por ejemplo, redirigir a una página predeterminada
         return "redirect:/paginaPredeterminada";
     }
-    
     
 }
 
