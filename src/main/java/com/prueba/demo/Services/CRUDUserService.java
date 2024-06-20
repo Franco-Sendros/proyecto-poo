@@ -21,6 +21,7 @@ public class CRUDUserService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
     /* 
     @Autowired
     private PermisosRepository permisosRepository;
@@ -28,6 +29,7 @@ public class CRUDUserService {
     @Autowired
     private TokenRepository tokenRepository;
     */
+
     public ResponseEntity<?> getAllUsers(){
         List<Usuario> usuarios = usuarioRepository.findAll();
         return ResponseEntity.ok(usuarios);
@@ -50,16 +52,10 @@ public class CRUDUserService {
             existingUser.setName(updatedUser.getName());
             existingUser.setRol(updatedUser.getRol());
 
-            existingUser.getPermisos().clear();
+                existingUser.getPermisos().clear();
             for (Permiso permiso : updatedUser.getPermisos()) {
                 permiso.setUsuario(existingUser);
                 existingUser.getPermisos().add(permiso);
-            }
-
-            existingUser.getSesiones().clear();
-            for (Token sesion : updatedUser.getSesiones()) {
-                sesion.setUsuario(existingUser);
-                existingUser.getSesiones().add(sesion);
             }
 
             if (updatedUser.getPassword() != null) {
