@@ -26,9 +26,11 @@ public class Usuario {
     @Column(name = "rol", nullable = false)
     private String rol;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Permiso> permisos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Token> sesiones;
 

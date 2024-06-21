@@ -3,37 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/interfaz.css"> <!-- etiqueta  donde llamamamos al archivo CSS -->
+    <link rel="stylesheet" href="/css/interfaz.css"> <!-- etiqueta donde llamamos al archivo CSS -->
     <title>Management</title>
 </head>
 <body>
 
-    <div class="menu">
-        <h2>Gestor de Usuarios</h2>
-    </div>
+<div class="menu">
+    <h2>Gestor de Usuarios</h2>
+</div>
 
-    <div class="users">
-        <h2>Nombre: Admin</h2>
-        <table>
-            <thead>
-                <tr>
-                    <!--<th>Seleccionador</th>-->
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Rol</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+<div class="users">
+    <h2>Nombre: Admin</h2>
+    <table>
+        <thead>
+        <tr>
+            <!--<th>Seleccionador</th>-->
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Este tbody será llenado dinámicamente -->
+        </tbody>
+    </table>
+</div>
 
-    <div class="user-management">
+<div class="user-management">
 
-        <button onclick="nuevo(1)">NUEVO</button>
-        <button onclick="editar(1)">EDITAR</button>
-        <button onclick="modificar(1)">MODIFICAR</button>
-        <button onclick="eliminar(1)">ELIMINAR</button>
+    <button onclick="nuevo(1)">NUEVO</button>
+    <button onclick="editar(1)">EDITAR</button>
+    <!--   <button onclick="modificar(1)">MODIFICAR</button> -->
+    <button onclick="eliminar(1)">ELIMINAR</button>
 
-    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/sistema_abm/users')
+            // Hacer una solicitud al endpoint para obtener los usuarios
+            .then(response => {
+                // Verificar si la respuesta es exitosa
+                if (!response.ok) {
+                    throw new Error('Error al obtener los usuarios');
+                }
+                return response.json(); // Convertir la respuesta a JSON
+            })
+            .then(usuarios => {
+                // Obtener el tbody de la tabla
+                const tbody = document.querySelector('.users table tbody');
+                // Limpiar el tbody existente para evitar duplicados
+                tbody.innerHTML = '';
+                // Recorrer los usuarios y crear las filas
+                usuarios.forEach(usuario => {
+                    // Crear una nueva fila
+                    const tr = document.createElement('tr');
+
+                    // Crear y agregar la celda del ID
+                    const tdId = document.createElement('td');
+                    tdId.textContent = usuario.id;
+                    tr.appendChild(tdId);
+
+                    // Crear y agregar la celda del Usuario como un hipervínculo
+                    const tdUsuario = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `/sistema/login/gestion/${usuario.id}`;
+                    link.textContent = usuario.name;  // Ajuste aquí
+                    tdUsuario.appendChild(link);
+                    tr.appendChild(tdUsuario);
+
+                    // Crear y agregar la celda del Rol
+                    const tdRol = document.createElement('td');
+                    tdRol.textContent = usuario.rol;
+                    tr.appendChild(tdRol);
+
+                    // Agregar la fila al tbody
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error('Error al procesar los usuarios:', error);
+            });
+    });
+</script>
 
 </body>
 </html>

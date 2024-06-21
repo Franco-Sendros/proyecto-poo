@@ -1,14 +1,12 @@
 package com.prueba.demo.Services;
 
 import com.prueba.demo.Models.Permiso;
-import com.prueba.demo.Models.Token;
 import com.prueba.demo.Models.Usuario;
-//import com.prueba.demo.Repositories.PermisosRepository;
-//import com.prueba.demo.Repositories.TokenRepository;
+import com.prueba.demo.Repositories.SistemaRepository;
 import com.prueba.demo.Repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,27 +19,44 @@ public class CRUDUserService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
-    /* 
     @Autowired
-    private PermisosRepository permisosRepository;
+    private SistemaRepository sistemaRepository;
 
-    @Autowired
-    private TokenRepository tokenRepository;
-    */
+    private void asignarPermisos(Usuario usuario) {
 
-    public ResponseEntity<?> getAllUsers(){
+        usuario.getPermisos().clear();
+
+        switch (usuario.getRol()) {
+            case "ADMIN":
+                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("PANEL_USUARIOS")));
+                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("GESTION_ACADEMICA")));
+                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("AUTOGESTION")));
+                break;
+            case "PROFESSOR":
+                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("GESTION_ACADEMICA")));
+                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("AUTOGESTION")));
+                break;
+            case "STUDENT":
+                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("AUTOGESTION")));
+                break;
+        }
+
+    }
+
+    public ResponseEntity<?> getAllUsers() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return ResponseEntity.ok(usuarios);
     }
 
-    public ResponseEntity<?> getUserById(long id){
+    public ResponseEntity<?> getUserById(long id) {
         return ResponseEntity.ok(usuarioRepository.findById(id));
     }
 
     public ResponseEntity<?> create(Usuario usuario) {
-        usuarioRepository.save(usuario);
-        return ResponseEntity.ok().build();
+        Usuario newUser = usuarioRepository.save(usuario);
+        asignarPermisos(newUser);
+        usuarioRepository.save(newUser); // Guardar los permisos asociados
+        return ResponseEntity.ok(newUser);
     }
 
     public ResponseEntity<?> update(long id, Usuario updatedUser) {
@@ -49,25 +64,19 @@ public class CRUDUserService {
         if (existingUserOpt.isPresent()) {
             Usuario existingUser = existingUserOpt.get();
 
-            existingUser.setName(updatedUser.getName());
-            existingUser.setRol(updatedUser.getRol());
-
-                existingUser.getPermisos().clear();
-            for (Permiso permiso : updatedUser.getPermisos()) {
-                permiso.setUsuario(existingUser);
-                existingUser.getPermisos().add(permiso);
-            }
+            existingUser.setName(updatedUser.getName() != null ? updatedUser.getName() : existingUser.getName());
+            existingUser.setRol(updatedUser.getRol() != null ? updatedUser.getRol() : existingUser.getRol());
 
             if (updatedUser.getPassword() != null) {
                 existingUser.setPassword(updatedUser.getPassword());
             }
 
+            asignarPermisos(existingUser);
             usuarioRepository.save(existingUser);
             return ResponseEntity.ok(existingUser);
         } else {
             return ResponseEntity.notFound().build();
         }
-
     }
 
     public ResponseEntity<?> delete(Long id) {
@@ -75,8 +84,9 @@ public class CRUDUserService {
         if (optionalUsuario.isPresent()) {
             usuarioRepository.delete(optionalUsuario.get());
         } else {
-            return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
         }
         return ResponseEntity.ok().build();
     }
+
 }
