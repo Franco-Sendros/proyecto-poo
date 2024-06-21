@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,8 @@ public class CRUDUserService {
 
     private void asignarPermisos(Usuario usuario) {
 
-        usuario.getPermisos().clear();
+        if (usuario.getPermisos() == null) { usuario.setPermisos(new HashSet<>()); }
+        else { usuario.getPermisos().clear(); }
 
         switch (usuario.getRol()) {
             case "ADMIN":
@@ -72,6 +74,7 @@ public class CRUDUserService {
             }
 
             asignarPermisos(existingUser);
+
             usuarioRepository.save(existingUser);
             return ResponseEntity.ok(existingUser);
         } else {

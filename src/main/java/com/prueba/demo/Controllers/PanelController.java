@@ -38,7 +38,12 @@ public class PanelController {
 
     @GetMapping("/gestion/{id}")
     public String getPaginaUsuario(HttpServletRequest requestCookies, Model model,@PathVariable long id) {
-        return "users";
+        return "user";
+    }
+
+    @GetMapping("/gestion/register")
+    public String getPaginaRegistro(HttpServletRequest requestCookies, Model model) {
+        return "alta";
     }
 
     @GetMapping("/")

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Configuro el lenguaje al español -->
+<html lang="es">
+<head>
+    <!-- Meta para soportar todos los caracteres en la mayoría de los lenguajes del mundo -->
+    <meta charset="UTF-8">
+    <!-- Define el título de la página web -->
+    <title>Registrar</title>
+    <!-- Enlaza HTML y CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<section>
+    <!-- Div para dividir el contenido -->
+    <div class="contenedor">
+        <!-- Div para darle características al formulario -->
+        <div class="formulario">
+            <!-- Formulario HTML para enviar datos -->
+            <form id="registerForm">
+                <!-- Subtitulo del formulario -->
+                <h2>Registrarse</h2>
+                <!-- Contenedor del input para el nombre de usuario -->
+                <div class="input-contenedor">
+                    <!-- REQUIERED es un campo obligatorio para el nombre de usuario -->
+                    <input type="text" name="username" required>
+                    <label for="username">Nombre de usuario</label>
+                </div>
+                <!-- Contenedor del input para la contraseña -->
+                <div class="input-contenedor">
+                    <!-- REQUIRED es un campo obligatorio para la contraseña -->
+                    <input type="password" name="password" required>
+                    <label for="password">Contraseña</label>
+                </div>
+                <!-- Contenedor del select para el rol -->
+                <div class="input-contenedor">
+                    <!-- REQUIRED es un campo obligatorio para el rol -->
+                    <select name="role" required>
+                        <option value="" disabled selected>Seleccionar Rol</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="PROFESSOR">PROFESOR</option>
+                        <option value="STUDENT">ESTUDIANTE</option>
+                    </select>
+                    <label for="role">Rol</label>
+                </div>
+                <!-- Boton para enviar el formulario -->
+                <button type="submit">Registrar</button>
+            </form>
+            <!-- Enlace para redirigir a la pagina de inicio de sesion -->
+            <div class="registrar">
+                <p>Ya tengo cuenta <a href="gestion.html">Iniciar sesión</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Agregar el script aquí para enviar el formulario como JSON -->
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+        // Obtiene los datos del formulario
+        const formData = new FormData(this);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Envía los datos del formulario en formato JSON usando fetch
+        fetch('/sistema_abm/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error en el registro');
+                }
+            })
+            .then(data => {
+                console.log('Registro exitoso:', data);
+                // Redirigir a /sistema_login/gestion después del registro exitoso
+                window.location.href = '/sistema_login/gestion';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Mostrar mensaje de error
+            });
+    });
+</script>
+</body>
+</html>

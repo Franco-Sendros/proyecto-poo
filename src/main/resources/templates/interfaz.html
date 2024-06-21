@@ -31,14 +31,14 @@
 
 <div class="user-management">
 
-    <button onclick="nuevo(1)">NUEVO</button>
-    <button onclick="editar(1)">EDITAR</button>
-    <!--   <button onclick="modificar(1)">MODIFICAR</button> -->
-    <button onclick="eliminar(1)">ELIMINAR</button>
+    <button onclick="nuevo()">NUEVO</button>
 
 </div>
 
 <script>
+    function nuevo() {
+        window.location.href = "/sistema_login/gestion/register";
+    }
     document.addEventListener('DOMContentLoaded', () => {
         fetch('/sistema_abm/users')
             // Hacer una solicitud al endpoint para obtener los usuarios
@@ -67,7 +67,7 @@
                     // Crear y agregar la celda del Usuario como un hipervínculo
                     const tdUsuario = document.createElement('td');
                     const link = document.createElement('a');
-                    link.href = `/sistema/login/gestion/${usuario.id}`;
+                    link.href = `/sistema_login/gestion/${usuario.id}`;
                     link.textContent = usuario.name;  // Ajuste aquí
                     tdUsuario.appendChild(link);
                     tr.appendChild(tdUsuario);
