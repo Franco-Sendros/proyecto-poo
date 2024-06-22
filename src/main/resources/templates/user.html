@@ -34,11 +34,7 @@
                     <input type="text" id="username" name="username" required>
                     <label for="username">Nombre de usuario</label>
                 </div>
-                <!-- Contenedor del input para la contraseña -->
-                <div class="input-contenedor">
-                    <input type="password" id="password" name="password">
-                    <label for="password">Contraseña</label>
-                </div>
+
                 <!-- Contenedor del select para el rol -->
                 <div class="input-contenedor">
                     <select id="role" name="role" required>
@@ -51,13 +47,13 @@
                 </div>
                 <!-- Contenedor para los botones -->
                 <div class="button-container">
-                    <button type="submit">Actualizar</button>
+                    <button type="button" id="updateButton">Actualizar</button>
                     <button type="button" id="deleteButton">Eliminar</button>
                 </div>
             </form>
             <!-- Enlace para volver a la página anterior -->
             <div class="registrar">
-                <p><a href="sistema_login/gestion">Volver</a></p>
+                <p><a href="/sistema_login/gestion">Volver</a></p>
             </div>
         </div>
     </div>
@@ -67,6 +63,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const userId = window.location.pathname.split('/').pop();
+
         // Obtener datos del usuario
         fetch(`/sistema_abm/users/${userId}`)
             .then(response => {
@@ -77,8 +74,8 @@
             })
             .then(data => {
                 if (data) {
-                    document.getElementById('username').value = data.username || '';
-                    document.getElementById('role').value = data.role || '';
+                    document.getElementById('username').value = data.name || '';
+                    document.getElementById('role').value = data.rol || '';
                 }
             })
             .catch(error => {
@@ -86,35 +83,28 @@
             });
 
         // Manejar la actualización del usuario
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        document.getElementById('updateButton').addEventListener('click', function() {
+            const name = document.getElementById('username').value;
+            const rol = document.getElementById('role').value;
 
-            const formData = new FormData(this);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+            const updateUser = { id: parseInt(userId), name, rol };
 
             fetch(`/sistema_abm/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(updateUser)
             })
                 .then(response => {
                     if (response.ok) {
-                        return response.json();
+                        alert('Usuario actualizado correctamente');
                     } else {
                         throw new Error('Error al actualizar el usuario');
                     }
                 })
-                .then(data => {
-                    console.log('Actualización exitosa:', data);
-                    window.location.href = '/sistema_login/gestion';
-                })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error al actualizar el usuario:', error);
                 });
         });
 
