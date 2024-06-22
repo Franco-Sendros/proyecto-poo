@@ -67,11 +67,10 @@ public class CRUDUserService {
             Usuario existingUser = existingUserOpt.get();
 
             existingUser.setName(updatedUser.getName() != null ? updatedUser.getName() : existingUser.getName());
+
             existingUser.setRol(updatedUser.getRol() != null ? updatedUser.getRol() : existingUser.getRol());
 
-            if (updatedUser.getPassword() != null) {
-                existingUser.setPassword(updatedUser.getPassword());
-            }
+            existingUser.setPassword(updatedUser.getPassword() != null ? updatedUser.getPassword() : existingUser.getPassword());
 
             asignarPermisos(existingUser);
 

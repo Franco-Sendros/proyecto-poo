@@ -1,3 +1,11 @@
+/* Ajuste global de la fuente */
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo para el contenedor principal */
 body {
     margin: 0;
     padding: 0;
@@ -7,47 +15,101 @@ body {
     align-items: center;
     width: 100%;
     min-height: 100vh;
-    background: white; /* Cambiado a blanco */
+    background: white;
 }
 
 .contenedor {
     position: relative;
     width: 90%;
-    max-width: 1000px; /* Añadir un límite máximo para evitar que se extienda demasiado en pantallas grandes */
+    max-width: 1000px;
     padding: 20px;
-    border: 2px solid rgba(0, 0, 0, 0.6); /* Reducir la opacidad del borde para que no sea tan prominente */
+    border: 2px solid rgba(0, 0, 0, 0.6);
     border-radius: 20px;
-    backdrop-filter: blur(15px); /* Genial para efectos de desenfoque en el fondo */
+    backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.1); /* Agregar un color de fondo semi-transparente para mejorar la legibilidad */
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.Titulo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .Titulo h2 {
-    color: black; /* Cambia el color del texto a negro */
+    color: black;
+    margin: 0;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
+    margin-bottom: 10px; /* Añadir margen inferior para espacio entre la barra de búsqueda y el botón */
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid darkgray;
+}
+
+.user-management {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px; /* Asegurar espacio entre el botón y la tabla */
+}
+
+.user-management button {
+    width: 100px;
+    height: 45px;
+    border-radius: 20px;
+    background: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    font-size: 1rem;
+    transition: .4s;
+}
+
+.user-management button:hover {
+    opacity: .9;
 }
 
 .users {
-    overflow: auto; /* Agrega scroll cuando el contenido excede las dimensiones */
-    max-height: 500px; /* Ajusta la altura máxima del contenedor de la tabla */
-    width: 100%; /* Ajusta el ancho del contenedor de la tabla */
-    backdrop-filter: blur(0px); /* Genial para efectos de desenfoque en el fondo */
+    overflow: auto;
+    width: 100%;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.users table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .users table th, .users table td {
-    padding: 30px 125px; /* Ajusta el espaciado horizontal */
+    padding: 10px;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .users table th {
     position: sticky;
     top: 0;
-    background-color: darkgray; /* Color de fondo para los th */
-    z-index: 1; /* Asegura que los th estén por encima del contenido de la tabla */
+    background-color: darkgray;
+    color: white; /* Color de texto blanco para el encabezado */
+    z-index: 1;
 }
 
 .users table td {
-    color: darkgray;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: black; /* Cambiar a un color más oscuro */
 }

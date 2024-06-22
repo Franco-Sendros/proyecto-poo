@@ -3,86 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/interfaz.css"> <!-- etiqueta donde llamamos al archivo CSS -->
-    <title>Management</title>
+    <link rel="stylesheet" href="/css/interfaz.css">
+    <title>Gestor de usuarios</title>
 </head>
 <body>
-
-    <div class="contenedor">
-        <div class="Titulo">
-            <h2>LISTA DE USUARIOS</h2>
+<div class="contenedor">
+    <div class="Titulo">
+        <h2>LISTA DE USUARIOS</h2>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar usuarios...">
         </div>
-        <div class="users">
-            <table>
-                <thead>
-                    <tr><!--<th>Seleccionador</th>-->
-                        <th>ID</th>
-                        <th>Usuario</th>
-                        <th>Rol</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
+    </div>
+    <div class="users">
         <div class="user-management">
             <button onclick="nuevo()">NUEVO</button>
         </div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <script>
+<script>
+    function nuevo() {
+        window.location.href = "/sistema_login/gestion/register";
+    }
 
-        function nuevo() {
-            window.location.href = "/sistema_login/gestion/register";
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/sistema_abm/users')
-                // Hacer una solicitud al endpoint para obtener los usuarios
-                .then(response => {
-                    // Verificar si la respuesta es exitosa
-                    if (!response.ok) {
-                        throw new Error('Error al obtener los usuarios');
-                    }
-                    return response.json(); // Convertir la respuesta a JSON
-                })
-                .then(usuarios => {
-                    // Obtener el tbody de la tabla
-                    const tbody = document.querySelector('.users table tbody');
-                    // Limpiar el tbody existente para evitar duplicados
-                    tbody.innerHTML = '';
-                    // Recorrer los usuarios y crear las filas
-                    usuarios.forEach(usuario => {
-                        // Crear una nueva fila
-                        const tr = document.createElement('tr');
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/sistema_abm/users')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener los usuarios');
+                }
+                return response.json();
+            })
+            .then(usuarios => {
+                const tbody = document.querySelector('.users table tbody');
+                tbody.innerHTML = '';
+                usuarios.forEach(usuario => {
+                    const tr = document.createElement('tr');
 
-                        // Crear y agregar la celda del ID
-                        const tdId = document.createElement('td');
-                        tdId.textContent = usuario.id;
-                        tr.appendChild(tdId);
+                    const tdId = document.createElement('td');
+                    tdId.textContent = usuario.id;
+                    tr.appendChild(tdId);
 
-                        // Crear y agregar la celda del Usuario como un hipervínculo
-                        const tdUsuario = document.createElement('td');
-                        const link = document.createElement('a');
-                        link.href = `/sistema_login/gestion/${usuario.id}`;
-                        link.textContent = usuario.name;  // Ajuste aquí
-                        tdUsuario.appendChild(link);
-                        tr.appendChild(tdUsuario);
+                    const tdUsuario = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `/sistema_login/gestion/${usuario.id}`;
+                    link.textContent = usuario.name;
+                    tdUsuario.appendChild(link);
+                    tr.appendChild(tdUsuario);
 
-                        // Crear y agregar la celda del Rol
-                        const tdRol = document.createElement('td');
-                        tdRol.textContent = usuario.rol;
-                        tr.appendChild(tdRol);
+                    const tdRol = document.createElement('td');
+                    tdRol.textContent = usuario.rol;
+                    tr.appendChild(tdRol);
 
-                        // Agregar la fila al tbody
-                        tbody.appendChild(tr);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error al procesar los usuarios:', error);
+                    tbody.appendChild(tr);
                 });
-        });
-    </script>
 
+                document.getElementById('searchInput').addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    filterUsers(searchTerm);
+                });
+
+                function filterUsers(term) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const userName = row.querySelector('td:nth-child(2) a').textContent.toLowerCase();
+                        if (userName.includes(term)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error al procesar los usuarios:', error);
+            });
+    });
+</script>
 </body>
 </html>
