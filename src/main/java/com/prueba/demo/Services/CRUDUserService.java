@@ -72,7 +72,7 @@ public class CRUDUserService {
         if (existingUserOpt.isPresent()) {
             Usuario existingUser = existingUserOpt.get();
             Usuario checkUser = usuarioRepository.findByName(updatedUser.getName());
-            if (checkUser != null) {
+            if (checkUser != null && checkUser.getId() != existingUser.getId()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuario ya existe");
             }
 
