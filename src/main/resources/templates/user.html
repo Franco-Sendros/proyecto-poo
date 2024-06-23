@@ -9,13 +9,17 @@
     <!-- Enlaza HTML y CSS -->
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        /* Estilo adicional para colocar los botones en línea */
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .button-container button {
-            width: 48%;
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.8); /* Fondo rojo más sólido */
+            color: white; /* Texto blanco */
+            border: 2px solid #FF6347; /* Borde naranja */
+            border-radius: 10px; /* Bordes redondeados */
+            padding: 15px; /* Espaciado interno */
+            margin-top: 15px; /* Espacio superior */
+            text-align: center; /* Texto centrado */
+            width: 100%; /* Ancho completo */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+            display: none; /* Ocultar el mensaje por defecto */
         }
     </style>
 </head>
@@ -45,10 +49,14 @@
                     </select>
                     <label for="role">Rol</label>
                 </div>
+                <!-- Contenedor para el mensaje de error -->
+                <div class="error-message" id="errorMessage">
+                    Nombre de usuario ya utilizado
+                </div>
                 <!-- Contenedor para los botones -->
                 <div class="button-container">
                     <button type="button" id="updateButton">Actualizar</button>
-                    <button type="button" id="deleteButton">Eliminar</button>
+                    <button type="button" id="deleteButton" data-confirm="false">Eliminar</button>
                 </div>
             </form>
             <!-- Enlace para volver a la página anterior -->
@@ -63,6 +71,20 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const userId = window.location.pathname.split('/').pop();
+        let countdownInterval;
+
+        // Función para mostrar el mensaje de error
+        function showErrorMessage(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block'; // Mostrar el mensaje de error
+        }
+
+        // Función para ocultar el mensaje de error
+        function hideErrorMessage() {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.style.display = 'none'; // Ocultar el mensaje de error
+        }
 
         // Obtener datos del usuario
         fetch(`/sistema_abm/users/${userId}`)
@@ -98,7 +120,11 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        alert('Usuario actualizado correctamente');
+                        hideErrorMessage(); // Ocultar el mensaje de error si se actualiza correctamente
+                        window.location.href = '/sistema_login/gestion'; // Redirigir después de la actualización
+                    } else if (response.status === 409) {
+                        // Conflict: Nombre de usuario ya utilizado
+                        showErrorMessage('Nombre de usuario ya utilizado');
                     } else {
                         throw new Error('Error al actualizar el usuario');
                     }
@@ -110,7 +136,25 @@
 
         // Manejar la eliminación del usuario
         document.getElementById('deleteButton').addEventListener('click', function() {
-            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+            const confirmState = this.getAttribute('data-confirm');
+
+            if (confirmState === 'false') {
+                let countdown = 3;
+                this.innerText = `¿Está seguro? (${countdown})`;
+                this.setAttribute('data-confirm', 'true');
+                this.disabled = true; // Deshabilitar el botón durante la cuenta regresiva
+
+                countdownInterval = setInterval(() => {
+                    countdown -= 1;
+                    if (countdown > 0) {
+                        this.innerText = `¿Está seguro? (${countdown})`;
+                    } else {
+                        clearInterval(countdownInterval);
+                        this.innerText = '¿Está seguro?';
+                        this.disabled = false; // Volver a habilitar el botón
+                    }
+                }, 1000);
+            } else {
                 fetch(`/sistema_abm/users/${userId}`, {
                     method: 'DELETE'
                 })

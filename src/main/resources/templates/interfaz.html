@@ -38,7 +38,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('/sistema_abm/users')
+        fetch('/sistema_abm/users', {
+            method: 'GET',
+            credentials: 'include' // Incluir cookies en la solicitud
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener los usuarios');
@@ -69,10 +72,13 @@
                     tbody.appendChild(tr);
                 });
 
-                document.getElementById('searchInput').addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    filterUsers(searchTerm);
-                });
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.toLowerCase();
+                        filterUsers(searchTerm);
+                    });
+                }
 
                 function filterUsers(term) {
                     const rows = tbody.querySelectorAll('tr');
@@ -88,6 +94,43 @@
             })
             .catch(error => {
                 console.error('Error al procesar los usuarios:', error);
+            });
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+        // Obtiene los datos del formulario
+        const formData = new FormData(this);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Envía los datos del formulario en formato JSON usando fetch
+        fetch('/sistema_abm/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include', // Incluir cookies en la solicitud
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error en el registro');
+                }
+            })
+            .then(data => {
+                console.log('Registro exitoso:', data);
+                // Redirigir a /sistema_login/gestion después del registro exitoso
+                window.location.href = '/sistema_login/gestion';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Mostrar mensaje de error
             });
     });
 </script>

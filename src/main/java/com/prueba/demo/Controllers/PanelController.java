@@ -21,8 +21,7 @@ public class PanelController {
     @Autowired
     private PanelService panelService;
 
-    @GetMapping("/gestion")
-    public String getPaginaPrincipal(HttpServletRequest requestCookies, Model model,HttpServletResponse responseCookies) {
+    public String checkSession(HttpServletRequest requestCookies, HttpServletResponse responseCookies, String filename){
         boolean sessionOK = panelService.checkSession(requestCookies);
         System.out.println(sessionOK);
         if (!sessionOK) {
@@ -32,18 +31,22 @@ public class PanelController {
             // Redirige al usuario a la página de login si la sesión no es válida
             return "redirect:/sistema_login/";
         }
-        // Si la sesión es válida, simplemente muestra la página principal
-        return "interfaz";
+        return filename;
+    }
+
+    @GetMapping("/gestion")
+    public String getPaginaPrincipal(HttpServletRequest requestCookies,HttpServletResponse responseCookies) {
+        return checkSession(requestCookies, responseCookies, "interfaz");
     }
 
     @GetMapping("/gestion/{id}")
-    public String getPaginaUsuario(HttpServletRequest requestCookies, Model model,@PathVariable long id) {
-        return "user";
+    public String getPaginaUsuario(HttpServletRequest requestCookies, HttpServletResponse responseCookies, Model model,@PathVariable long id) {
+        return checkSession(requestCookies, responseCookies, "user");
     }
 
     @GetMapping("/gestion/register")
-    public String getPaginaRegistro(HttpServletRequest requestCookies, Model model) {
-        return "alta";
+    public String getPaginaRegistro(HttpServletRequest requestCookies, HttpServletResponse responseCookies) {
+        return checkSession(requestCookies, responseCookies, "alta");
     }
 
     @GetMapping("/")

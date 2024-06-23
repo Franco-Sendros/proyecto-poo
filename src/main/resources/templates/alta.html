@@ -8,6 +8,23 @@
     <title>Registrar</title>
     <!-- Enlaza HTML y CSS -->
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Estilos adicionales para el mensaje de error */
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.8); /* Fondo rojo más sólido */
+            color: white; /* Texto blanco */
+            border: 2px solid #FF6347; /* Borde naranja */
+            border-radius: 10px; /* Bordes redondeados */
+            padding: 15px; /* Espaciado interno */
+            margin-top: 10px; /* Espacio superior ajustado */
+            margin-bottom: 20px; /* Espacio inferior para separación del botón */
+            text-align: center; /* Texto centrado */
+            width: calc(100% - 40px); /* Ancho ajustado para mantener simetría */
+            max-width: 400px; /* Máximo ancho para mantener control del diseño */
+            display: none; /* Inicialmente oculto */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+        }
+    </style>
 </head>
 <body>
 <section>
@@ -35,17 +52,20 @@
                 <div class="input-contenedor">
                     <!-- REQUIRED es un campo obligatorio para el rol -->
                     <select name="role" required>
-                        <option value="" disabled selected>Seleccionar Rol</option>
+                        <option value="" disabled selected></option>
                         <option value="ADMIN">ADMIN</option>
                         <option value="PROFESSOR">PROFESOR</option>
                         <option value="STUDENT">ESTUDIANTE</option>
                     </select>
-                    <label for="role">Rol</label>
+                    <label for="role">Seleccionar Rol</label>
+                </div>
+                <!-- Contenedor para el mensaje de error -->
+                <div class="error-message" id="errorMessage">
+                    Un usuario ya fue registrado con ese nombre.
                 </div>
                 <!-- Boton para enviar el formulario -->
                 <button type="submit">Registrar</button>
             </form>
-
         </div>
     </div>
 </section>
@@ -54,6 +74,10 @@
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+        // Oculta el mensaje de error por defecto
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.style.display = 'none';
 
         // Obtiene los datos del formulario
         const formData = new FormData(this);
@@ -74,7 +98,7 @@
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error('Error en el registro');
+                    throw new Error('Ya existe un usuario con ese nombre.');
                 }
             })
             .then(data => {
@@ -85,6 +109,7 @@
             .catch(error => {
                 console.error('Error:', error);
                 // Mostrar mensaje de error
+                errorMessage.style.display = 'block';
             });
     });
 </script>

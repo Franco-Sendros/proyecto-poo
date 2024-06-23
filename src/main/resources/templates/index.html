@@ -1,31 +1,18 @@
 <!DOCTYPE html>
-<!--configuro el lenguaje al español-->
 <html lang="es">
 <head>
-    <!--este meta lo que hace es soportar todos los caracteres en la mayoria de los lenguajes del mundo-->
     <meta charset="UTF-8">
-    <!--define el titulo de la pagina web-->
     <title>Login</title>
-    <!--enlaza html y css-->
     <link rel="stylesheet" href="/css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <section>
-    <!--los div son simplemente una forma de dividir-->
     <div class="contenedor">
-        <!--en esta division emppiezo a darle caracteristicas al formulario-->
         <div class="formulario">
-
-            <!--con esto creo el formulario html para enviar datos-->
             <form id="login-form" th:action="@{/sistema_login/login}" method="post">
-                <!--el h2 es un subtitulo-->
                 <h2>Iniciar sesión</h2>
-                <!--esta clase input me crea las celdas para poder colocar el email, -->
                 <div class="input-contenedor">
-                    <!--el required indica que sea obligatorio colocarlo-->
-                    <!--el name se coloca para que los datos del formulario sean correctamente enviados-->
-                    <!--sin el name los datos no se enviaran correctamente-->
                     <input type="text" id="username" name="username" placeholder="Usuario" required>
                     <label for="username">Usuario</label>
                 </div>
@@ -35,10 +22,13 @@
                     <label for="password">Contraseña</label>
                 </div>
 
-
                 <button type="submit">Acceder</button>
-            </form>
 
+                <!-- Mensaje de error -->
+                <div id="error-message" class="error-message" style="display: none;">
+                    Usuario o contraseña incorrectos
+                </div>
+            </form>
         </div>
     </div>
 </section>
@@ -63,15 +53,19 @@
             })
                 .then(response => {
                     // Comprueba el código de estado de la respuesta
-                    if (response.status === 201) {
+                    if (response.ok) {
                         // Redirige al usuario a otra página si el inicio de sesión fue exitoso
                         window.location.href = "/sistema_login/gestion"; // URL a la que deseas redirigir
                     } else {
-                        // Maneja otros códigos de estado según sea necesario
-                        console.error('Error de inicio de sesión');
+                        // Mostrar mensaje de error si el inicio de sesión falla
+                        document.getElementById('error-message').style.display = 'block';
                     }
                 })
-                .catch(error => console.error('Error:', error)); // Maneja cualquier error que pueda ocurrir
+                .catch(error => {
+                    // Maneja cualquier error que pueda ocurrir
+                    console.error('Error:', error);
+                    document.getElementById('error-message').style.display = 'block';
+                });
         });
     });
 </script>

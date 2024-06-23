@@ -55,9 +55,15 @@ public class CRUDUserService {
     }
 
     public ResponseEntity<?> create(Usuario usuario) {
+
+        Optional<Usuario> checkUser = Optional.ofNullable(usuarioRepository.findByName(usuario.getName()));
+        if (checkUser.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuario ya existe");
+        }
         Usuario newUser = usuarioRepository.save(usuario);
         asignarPermisos(newUser);
         usuarioRepository.save(newUser); // Guardar los permisos asociados
+
         return ResponseEntity.ok(newUser);
     }
 
@@ -65,6 +71,10 @@ public class CRUDUserService {
         Optional<Usuario> existingUserOpt = usuarioRepository.findById(id);
         if (existingUserOpt.isPresent()) {
             Usuario existingUser = existingUserOpt.get();
+            Usuario checkUser = usuarioRepository.findByName(updatedUser.getName());
+            if (checkUser != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuario ya existe");
+            }
 
             existingUser.setName(updatedUser.getName() != null ? updatedUser.getName() : existingUser.getName());
 

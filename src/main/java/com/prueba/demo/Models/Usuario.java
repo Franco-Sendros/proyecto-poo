@@ -1,6 +1,7 @@
 package com.prueba.demo.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Set;
 import lombok.*;
@@ -9,6 +10,7 @@ import lombok.*;
 @Entity
 @Getter @Setter @ToString
 @Table(name = "usuarios")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario {
 
     @Id
@@ -42,4 +44,5 @@ public class Usuario {
         this.password = password;
         this.rol = rol;
     }
+
 }
