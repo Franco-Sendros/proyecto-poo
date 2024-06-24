@@ -10,7 +10,7 @@ section {
     align-items: center;
     width: 100%;
     min-height: 100vh;
-    background: url("./img/fondo_patagonia3.jpg") no-repeat;
+    background: url("./img/fondo_unsada.jpg") no-repeat;
     background-position: center;
     background-size: cover;
 }
@@ -19,7 +19,7 @@ section {
     position: relative;
     width: 400px;
     padding: 20px;
-    border: 2px solid rgba(255, 255, 255, .6);
+    border: 2px solid rgba(53, 53, 53, 0.68);
     border-radius: 20px;
     backdrop-filter: blur(15px);
     display: flex;
@@ -35,7 +35,7 @@ section {
 
 .formulario h2 {
     font-size: 2.3rem;
-    color: #fff;
+    color: #000000;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -44,7 +44,7 @@ section {
     position: relative;
     margin: 30px 0;
     width: 300px;
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid #000000;
 }
 
 .input-contenedor label {
@@ -52,7 +52,7 @@ section {
     top: 50%;
     left: 5px;
     transform: translateY(-50%);
-    color: #fff;
+    color: #000000;
     font-size: 1rem;
     pointer-events: none;
     transition: .6s;
@@ -72,7 +72,7 @@ input:valid ~ label {
     outline: none;
     font-size: 1rem;
     padding: 0 5px;
-    color: #fff;
+    color: #000000;
 }
 
 .input-contenedor i {
@@ -125,14 +125,14 @@ button:hover {
 
 .registrar {
     font-size: .8rem;
-    color: #fff;
+    color: #000000;
     text-align: center;
     margin: 20px 0 10px;
 }
 
 .registrar p a {
     text-decoration: none;
-    color: #fff;
+    color: #000000;
     font-weight: bold;
     transition: .3s;
 }
@@ -174,7 +174,7 @@ button:hover {
     outline: none;
     font-size: 1rem;
     padding: 0 5px;
-    color: #fff;
+    color: #000000;
     border-bottom: 2px solid #fff;
     appearance: none;
 }
@@ -184,7 +184,7 @@ button:hover {
     top: 50%;
     left: 5px;
     transform: translateY(-50%);
-    color: #fff;
+    color: #000000;
     font-size: 1rem;
     pointer-events: none;
     transition: .6s;

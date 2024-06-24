@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/interfaz.css">
-    <title>Gestor de usuarios</title>
+    <link rel="stylesheet" href="/css/interfaz.css"> <!-- etiqueta donde llamamos al archivo CSS -->
+    <title>Gestor de Usuarios</title>
 </head>
 <body>
 <div class="contenedor">
     <div class="Titulo">
-        <h2>LISTA DE USUARIOS</h2>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar usuarios...">
-        </div>
+        <h2>Lista de Usuarios</h2>
     </div>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Buscar usuarios...">
+    </div>
+
     <div class="users">
-        <div class="user-management">
-            <button onclick="nuevo()">NUEVO</button>
-        </div>
         <table>
             <thead>
-            <tr>
+            <tr><!--<th>Seleccionador</th>-->
                 <th>ID</th>
                 <th>Usuario</th>
                 <th>Rol</th>
@@ -29,6 +28,9 @@
             <tbody>
             </tbody>
         </table>
+    </div>
+    <div class="user-management">
+        <button onclick="nuevo()">Nuevo</button>
     </div>
 </div>
 
@@ -134,5 +136,6 @@
             });
     });
 </script>
+
 </body>
 </html>

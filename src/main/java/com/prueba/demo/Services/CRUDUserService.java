@@ -91,7 +91,7 @@ public class CRUDUserService {
         }
     }
 
-    public ResponseEntity<?> delete(Long id) {
+    public ResponseEntity<?> delete(long id) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
             usuarioRepository.delete(optionalUsuario.get());

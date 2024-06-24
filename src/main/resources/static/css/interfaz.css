@@ -1,115 +1,163 @@
-/* Ajuste global de la fuente */
-* {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Estilo para el contenedor principal */
+/* Estilos globales para el cuerpo del documento */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif; /* Tipografía principal */
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-height: 100vh;
-    background: white;
+    min-height: 100vh; /* Asegura que el cuerpo ocupe al menos toda la altura de la ventana */
+    background: url("./img/fondo_unsada.jpg") no-repeat center/cover; /* Fondo de la página con ajuste */
+    background-size: cover; /* Asegura que el fondo cubra todo el contenedor */
 }
 
+/* Estilos para el contenedor principal */
 .contenedor {
     position: relative;
-    width: 90%;
-    max-width: 1000px;
+    width: 60%; /* Ajustado para un ancho más adaptable */
+    max-width: 1000px; /* Limita el ancho máximo del contenedor */
     padding: 20px;
-    border: 2px solid rgba(0, 0, 0, 0.6);
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
+    border: 2px solid rgba(85, 85, 85, 0.6); /* Borde con opacidad reducida */
+    border-radius: 20px; /* Esquinas redondeadas */
+    backdrop-filter: blur(15px); /* Desenfoque del fondo detrás del contenedor */
+    background-color: rgba(234, 229, 229, 0.5); /* Fondo semitransparente */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.1);
+
 }
 
+/* Estilos para el título */
 .Titulo {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    color: rgb(35, 65, 75);
+    font-size: 20px; /* Tamaño de fuente del título */
 }
 
-.Titulo h2 {
-    color: black;
-    margin: 0;
-}
-
+/* Estilos para el contenedor de la barra de búsqueda */
 .search-bar {
-    display: flex;
-    justify-content: flex-end;
-    width: 50%;
-    margin-bottom: 10px; /* Añadir margen inferior para espacio entre la barra de búsqueda y el botón */
+    display: flex; /* Flexbox para alinear el input*/
+    align-items: center; /* Alinea verticalmente los elementos */
+    background-color: rgba(234, 229, 229, 0.8); /* Fondo semitransparente similar al del contenedor principal */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 5px 10px; /* Espaciado interno */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    margin-right: auto; /* Empuja la barra de búsqueda a la derecha */
 }
 
+/* Estilos para el input de búsqueda */
 .search-bar input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid darkgray;
+    padding: 8px 12px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de la fuente */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    flex: 1; /* Permite que el input ocupe el espacio disponible */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+    color: rgb(45, 85, 95); /* Color del texto */
+    outline: none; /* Elimina el borde por defecto al enfocar */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave para el fondo y la sombra */
 }
+
+.search-bar input:focus {
+    background-color: rgba(255, 255, 255, 1); /* Fondo completamente blanco al enfocar */
+    box-shadow: 0 0 5px rgba(45, 85, 95, 0.5); /* Sombra ligera al enfocar */
+}
+
+/* Estilos para el contenedor de la tabla dentro de .users */
+.users {
+    overflow: auto; /* Permite el desplazamiento si el contenido excede el tamaño */
+    max-height: 450px; /* Limita la altura máxima del contenedor de la tabla */
+    width: 100%; /* Asegura que el contenedor de la tabla ocupe todo el ancho disponible */
+    background-color: rgba(255, 255, 255, 0.95); /* Color de fondo blanco semitransparente */
+    border-radius: 10px; /* Esquinas redondeadas */
+    margin-top: 20px; /* Espacio superior entre contenedores */
+}
+
+/* Estilos para la tabla */
+.users table {
+    width: 100%; /* La tabla ocupa todo el ancho del contenedor */
+    border-collapse: collapse; /* Elimina el espacio entre las celdas */
+}
+
+/* Estilos para las celdas de encabezado (th) */
+.users table th {
+    padding: 20px; /* Reducido el padding para un aspecto más compacto */
+    text-align: center; /* Texto centrado */
+    background-color: rgba(45, 85, 95, 1); /* Color de fondo verde azulado oscuro */
+    color: white; /* Texto en color blanco */
+    position: sticky; /* Encabezados pegajosos en la parte superior al hacer scroll */
+    top: 0; /* Mantiene las celdas de encabezado en la parte superior */
+    z-index: 2; /* Asegura que los encabezados estén por encima del contenido de la tabla */
+}
+
+/* Estilos para las celdas del cuerpo (td) */
+.users table td {
+    padding: 10px; /* Reducido el padding para un aspecto más compacto */
+    text-align: center; /* Texto centrado */
+    background-color: rgba(10, 136, 124, 0.8); /* Color de fondo verde lima */
+    color: black; /* Color del texto negro */
+}
+
+/* Estilo para las filas de la tabla dentro de .users */
+.users table tr {
+    border-bottom: 1px solid rgba(45, 85, 95, 0.5); /* Línea divisora entre registros */
+}
+
+.users table tr:last-child {
+    border-bottom: none; /* Remover la línea de la última fila */
+}
+
+/*------------- Estilos para el botón "NUEVO" ---------------*/
 
 .user-management {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px; /* Asegurar espacio entre el botón y la tabla */
+    position: relative; /* Cambiar a relativo para que respete el flujo del documento */
+    margin-top: 20px; /* Añade espacio por encima del botón */
+    align-self: flex-start; /* Alinea el botón a la izquierda */
 }
 
 .user-management button {
-    width: 100px;
-    height: 45px;
-    border-radius: 20px;
-    background: #fff;
-    border: 2px solid rgba(0, 0, 0, 0.6);
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    font-size: 1rem;
-    transition: .4s;
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de fuente */
+    background-color: rgb(45, 85, 95); /* Color de fondo similar al utilizado en los encabezados de tabla */
+    color: white; /* Color de texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Esquinas redondeadas */
+    cursor: pointer; /* Cursor de tipo puntero al pasar el mouse */
+    transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
 }
 
 .user-management button:hover {
-    opacity: .9;
+    background-color: rgb(35, 65, 75); /* Cambio de color de fondo al pasar el mouse */
 }
 
-.users {
-    overflow: auto;
-    width: 100%;
-    max-height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/*------------ Estilos para los enlaces dentro de la tabla de usuarios -----------------*/
+
+.users table a {
+    text-decoration: none; /* Elimina el subrayado por defecto */
+    color: black; /* Color de texto para los enlaces */
+    transition: color 0.3s ease; /* Transición suave para el cambio de color */
 }
 
-.users table {
-    width: 100%;
-    border-collapse: collapse;
+.users table a:hover {
+    text-decoration: underline; /* Subrayado al pasar el mouse */
+    color: rgb(35, 65, 75); /* Cambio de color al pasar el mouse */
 }
 
-.users table th, .users table td {
-    padding: 10px;
-    text-align: center;
+/*-------------- Estilos para la barra de desplazamiento -----------------*/
+
+::-webkit-scrollbar {
+    width: 15px; /* Ancho de la barra de desplazamiento */
 }
 
-.users table th {
-    position: sticky;
-    top: 0;
-    background-color: darkgray;
-    color: white; /* Color de texto blanco para el encabezado */
-    z-index: 1;
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1); /* Color de fondo de la pista */
 }
 
-.users table td {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: black; /* Cambiar a un color más oscuro */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(45, 85, 95, 0.7); /* Color del "pulgón" o manija */
+    border-radius: 5px; /* Borde redondeado del "pulgón" */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(45, 85, 95, 0.9); /* Color del "pulgón" al pasar el mouse */
 }
