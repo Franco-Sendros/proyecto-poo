@@ -86,7 +86,7 @@ public class ServiceApiLogin {
             // Crear la respuesta
             LoginApiController.ResponseLogin response = new LoginApiController.ResponseLogin();
             response.token = token;
-            response.userId = userId;
+            response.userId = userId+"";
             response.expiresIn = expiresIn;
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 

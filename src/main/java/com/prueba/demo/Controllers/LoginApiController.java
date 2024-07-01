@@ -34,7 +34,7 @@ public class LoginApiController {
     // Clase para representar la respuesta de autenticación
     static public class ResponseLogin {
         public String token;
-        public Long userId;
+        public String userId;
         public long expiresIn;
     }
 
