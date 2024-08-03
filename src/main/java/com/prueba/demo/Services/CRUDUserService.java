@@ -35,7 +35,6 @@ public class CRUDUserService {
                 usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("AUTOGESTION")));
                 break;
             case "PROFESSOR":
-                usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("GESTION_ACADEMICA")));
                 usuario.getPermisos().add(new Permiso(usuario, sistemaRepository.findBySystemName("AUTOGESTION")));
                 break;
             case "STUDENT":
@@ -62,9 +61,21 @@ public class CRUDUserService {
         }
         Usuario newUser = usuarioRepository.save(usuario);
         asignarPermisos(newUser);
-        usuarioRepository.save(newUser); // Guardar los permisos asociados
-
+        usuarioRepository.save(newUser);
         return ResponseEntity.ok(newUser);
+    }
+
+    public ResponseEntity<?> createStudent(Usuario usuario) {
+
+        Optional<Usuario> checkUser = Optional.ofNullable(usuarioRepository.findByName(usuario.getName()));
+        if (checkUser.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuario ya existe");
+        }
+
+        Usuario newUser = usuarioRepository.save(usuario);
+        asignarPermisos(newUser);
+        usuarioRepository.save(newUser);
+        return ResponseEntity.ok(newUser.getId());
     }
 
     public ResponseEntity<?> update(long id, Usuario updatedUser) {

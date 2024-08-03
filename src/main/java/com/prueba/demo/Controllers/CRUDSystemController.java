@@ -24,12 +24,22 @@ public class CRUDSystemController {
         public String role;
     }
 
+    static public class StudentForm{
+        public String username;
+        public String password;
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserForm user, HttpServletRequest request) {
         if (!panelService.checkSession(request)) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
         return crudUserService.create(new Usuario(user.username, user.password, user.role));
+    }
+
+    @PostMapping("/registerStudent")
+    public ResponseEntity<?> registerStudent(@RequestBody StudentForm user, HttpServletRequest request) {
+        return crudUserService.createStudent(new Usuario(user.username, user.password, "STUDENT"));
     }
 
     @PutMapping("/users/{id}")
