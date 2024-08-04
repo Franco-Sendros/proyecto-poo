@@ -58,6 +58,11 @@ public class CRUDSystemController {
         return crudUserService.delete(id);
     }
 
+    @DeleteMapping("/users/students/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable long id, HttpServletRequest request) {
+        return crudUserService.delete(id);
+    }
+
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(HttpServletRequest request) {
         if (!panelService.checkSession(request)) {
