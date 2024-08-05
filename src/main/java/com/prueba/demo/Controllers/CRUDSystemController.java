@@ -29,6 +29,12 @@ public class CRUDSystemController {
         public String password;
     }
 
+    static public class ChangePassForm{
+        public String username;
+        public String oldPassword;
+        public String newPassword;
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserForm user, HttpServletRequest request) {
         if (!panelService.checkSession(request)) {
@@ -40,6 +46,11 @@ public class CRUDSystemController {
     @PostMapping("/registerStudent")
     public ResponseEntity<?> registerStudent(@RequestBody StudentForm user, HttpServletRequest request) {
         return crudUserService.createStudent(new Usuario(user.username, user.password, "STUDENT"));
+    }
+
+    @PutMapping("/users/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePassForm form, HttpServletRequest request) {
+        return crudUserService.changePassword(form.username, form.oldPassword, form.newPassword);
     }
 
     @PutMapping("/users/{id}")

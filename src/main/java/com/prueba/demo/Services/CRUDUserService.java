@@ -102,6 +102,17 @@ public class CRUDUserService {
         }
     }
 
+    public ResponseEntity<?> changePassword(String username, String oldPassword, String newPassword) {
+        Usuario usuario = usuarioRepository.findByName(username);
+        if (usuario != null && usuario.getPassword().equals(oldPassword)) {
+            usuario.setPassword(newPassword);
+            usuarioRepository.save(usuario);
+            return ResponseEntity.ok("Usuario actualizado correctamente");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     public ResponseEntity<?> delete(long id) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {

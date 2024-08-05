@@ -54,6 +54,16 @@ public class PanelController {
         return "index";
     }
 
+    @GetMapping("/changePassword")
+    public String changePassword() {
+        return "changePassword";
+    }
+
+    @GetMapping("/okClose")
+    public String okClose() {
+        return "okClose";
+    }
+
     @GetMapping("/redirection")
     public String redireccionamiento(HttpServletRequest request, HttpServletResponse response) {
         // Busca la cookie "ultimaPagina" en las cookies de la solicitud
